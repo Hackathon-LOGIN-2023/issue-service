@@ -43,6 +43,8 @@ router.delete("/:id", async (req, res) => {});
 
 router.put("/:id", async (req, res) => {});
 
-router.get("/:id", async (req, res) => {});
+router.get("/:id", async (req, res) => {
+    const issue = Issue.findOne({ _id: new ObjectId(req.query.idIssue.toString()) });
+});
 
 module.exports = router;
