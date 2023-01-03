@@ -5,6 +5,7 @@ const mongoRUI = process.env.mongoRUI;
 const connectDB = () => {
   try {
     // connect to mongoDB
+    console.log(mongoRUI);
     mongoose.connect(mongoRUI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

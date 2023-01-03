@@ -4,6 +4,15 @@ const Issue = require("../models/issue");
 const fs = require("fs");
 
 router.post("/", async (req, res) => {
+  var image = req.files.image;
+  // convert this image to base64cle
+  console.log(image.data);
+
+  // fs.writeFile("./O2.png", image.data, { encoding: "base64" }, function (err) {
+  //   console.log("File created");
+  // });
+  res.send("Ok");
+  // var imageAsBase64 = fs.readFileSync(image, "base64");
   //   var imagename = Date.now();
   //   try {
   //     var image = req.files.image;

@@ -2,29 +2,21 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const issueSchema = new Schema({
-  title: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
-  date: {
-    type: String,
-  },
-  photo: {
-    type: String,
-  },
-  location: {
-    type: String,
-  },
+  title: String,
+  description: String,
+  date: String,
+  photo: Buffer,
+  location: String,
   status: {
     type: String,
+    enum: ["pending", "closed"],
+    default: "pending",
   },
-  userId: {
-    type: String,
-  },
+  userId: Schema.Types.ObjectId,
   severity: {
     type: String,
+    enum: ["high", "medium", "low"],
+    default: "medium",
   },
   category: {
     type: String,
@@ -32,8 +24,8 @@ const issueSchema = new Schema({
     default: "category 1",
   },
   votes: {
-    userId: { type: String },
-    value: { type: Number },
+    userId: Schema.Types.ObjectId,
+    value: Number,
   },
 });
 
