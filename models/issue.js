@@ -6,7 +6,7 @@ const issueSchema = new Schema({
   title: String,
   description: String,
   date: String,
-  photo: Buffer,
+  photo: String,
   location: String,
   status: {
     type: String,

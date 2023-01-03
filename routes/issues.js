@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
       title: parsedIssue.title,
       description: parsedIssue.description,
       date: parsedIssue.date,
-      photo: req.files.image.data,
+      photo: req.files.image.data.toString("base64"),
       location: parsedIssue.location,
       status: parsedIssue.status,
       userId: parsedIssue.userId,
