@@ -28,9 +28,12 @@ const issueSchema = new Schema({
   },
   category: {
     type: String,
+    enum: ["category 1", "category 2", "category 3", "category 4"],
+    default: "category 1",
   },
   votes: {
-    type: Number,
+    userId: { type: String },
+    value: { type: Number },
   },
 });
 

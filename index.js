@@ -1,7 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/db");
-const cors = require("cors");
-const upload = require("express-fileupload");
+// const cors = require("cors");
+// const upload = require("express-fileupload");
 
 // const corsOption = {
 //   origin: "http://localhost:20699",
@@ -20,10 +20,10 @@ app.get("/", (req, res) => {
   res.send("API running");
 });
 
-app.use("/images", express.static("./images"));
+// app.use("/images", express.static("./images"));
 
 // Define Routes
-app.use("/news", require("./routes/news"));
+app.use("/issues", require("./routes/issues.js"));
 
 const PORT = process.env.PORT || 9000;
 
