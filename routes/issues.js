@@ -29,7 +29,14 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+    try {
+        res.status(200).json(await Issue.find({}));
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+    
+});
 
 router.delete("/:id", async (req, res) => {
   try {
