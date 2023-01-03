@@ -41,7 +41,15 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {});
+router.put("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const issue = await Issue.updateOne({ _id: id }, { $set: req.body });
+    res.status(200).json(issue);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 router.get("/:id", async (req, res) => {
   try {
