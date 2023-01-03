@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {});
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const issue = await Issue.deleteOne({ _id: new ObjectId(id) });
+    const issue = await Issue.deleteOne({ _id: id });
     res.status(200).json(issue);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -47,7 +47,8 @@ router.put("/:id", async (req, res) => {});
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const issue = await Issue.findOne({ _id: new ObjectId(id) });
+    console.log(id);
+    const issue = await Issue.findOne({ _id: id });
     res.status(200).json(issue);
   } catch (error) {
     res.status(400).json({ error: error.message });
