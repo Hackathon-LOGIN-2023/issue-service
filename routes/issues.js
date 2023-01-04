@@ -2,6 +2,31 @@ const express = require("express");
 const router = express.Router();
 const Issue = require("../models/issue");
 
+// get all issues by category
+router.get("/category/:cat", async (req, res) => {
+  try {
+    const category = req.params.cat;
+    console.log(category);
+    const issue = await Issue.find({
+      category: category,
+    });
+    res.status(200).json(issue);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+});
+router.get("/user/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const issue = await Issue.find({ _userId: id });
+    res.status(200).json(issue);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     let parsedIssue = JSON.parse(req.body.data);
@@ -28,9 +53,19 @@ router.post("/", async (req, res) => {
     res.status().send("Error while adding the issue : " + error);
   }
 });
-
+router.get("/:id", async (req, res) => {
+  try {
+    console.log("third");
+    const id = req.params.id;
+    const issue = await Issue.findOne({ _id: id });
+    res.status(200).json(issue);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 router.get("/", async (req, res) => {
   try {
+    console.log("all");
     res.status(200).json(await Issue.find({}));
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -56,40 +91,6 @@ router.put("/:id", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
-
-router.get("/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const issue = await Issue.findOne({ _id: id });
-    res.status(200).json(issue);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-router.get("/user/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const issue = await Issue.find({ _userId: id });
-    res.status(200).json(issue);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-
-router.get("/category/:category", async (req, res) => {
-    try {
-        console.log("s")
-      const category = req.params.category;
-      const issue = await Issue.find({ category: category });
-      res.status(200).json(issue);
-    } catch (error) {
-      console.log(error)
-      res.status(400).json(error);
-    }
-  });
-
 
 router.post("/vote", async (req, res) => {
   try {
