@@ -77,6 +77,20 @@ router.get("/user/:id", async (req, res) => {
   }
 });
 
+
+router.get("/category/:category", async (req, res) => {
+    try {
+        console.log("s")
+      const category = req.params.category;
+      const issue = await Issue.find({ category: category });
+      res.status(200).json(issue);
+    } catch (error) {
+      console.log(error)
+      res.status(400).json(error);
+    }
+  });
+
+
 router.post("/vote", async (req, res) => {
   try {
     const id = req.body.id;
