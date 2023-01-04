@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 const upload = require("express-fileupload");
 
 // const corsOption = {
+  
 //   origin: "http://localhost:20699",
 // };
 // Connect to the Database
