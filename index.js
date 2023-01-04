@@ -13,7 +13,7 @@ const app = express();
 
 // Init Midleware
 // app.use(cors(corsOption));
-// app.use(express.json({ extended: false }));
+app.use(express.json({ extended: false }));
 app.use(upload()); // permet l'upload des images
 
 app.get("/", (req, res) => {

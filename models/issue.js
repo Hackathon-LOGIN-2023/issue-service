@@ -7,7 +7,10 @@ const issueSchema = new Schema({
   description: String,
   date: String,
   photo: String,
-  location: String,
+  location: {
+    longitude: Number,
+    latitude: Number,
+  },
   status: {
     type: String,
     enum: ["pending", "closed"],
@@ -24,10 +27,12 @@ const issueSchema = new Schema({
     enum: ["category 1", "category 2", "category 3", "category 4"],
     default: "category 1",
   },
-  votes: {
-    userId: Schema.Types.ObjectId,
-    value: Number,
-  },
+  votes: [
+    {
+      userId: Schema.Types.ObjectId,
+      value: Number,
+    },
+  ],
 });
 
 module.exports = mongoose.model("issue", issueSchema);

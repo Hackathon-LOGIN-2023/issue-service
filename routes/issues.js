@@ -30,12 +30,11 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-    try {
-        res.status(200).json(await Issue.find({}));
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-    
+  try {
+    res.status(200).json(await Issue.find({}));
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
 router.delete("/:id", async (req, res) => {
@@ -61,7 +60,6 @@ router.put("/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
     const issue = await Issue.findOne({ _id: id });
     res.status(200).json(issue);
   } catch (error) {
@@ -70,14 +68,38 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/user/:id", async (req, res) => {
-    try {
-      const id = req.params.id;
-      console.log(id);
-      const issue = await Issue.find({ _userId: id });
-      res.status(200).json(issue);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+  try {
+    const id = req.params.id;
+    const issue = await Issue.find({ _userId: id });
+    res.status(200).json(issue);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.post("/vote", async (req, res) => {
+  try {
+    const id = req.body.id;
+    const userId = req.body.userId;
+    // value equals 1 if the value is supperior to 1 and -1 if the value is inferior to 1
+    const value = req.body.value > 0 ? 1 : -1;
+    const issue = await Issue.findOne({ _id: id });
+    const votes = issue.votes;
+    const index = votes.findIndex((vote) => vote.userId == userId);
+    if (index === -1) {
+      votes.push({ userId, value });
+    } else {
+      votes[index].value = value;
     }
-  });
+    const updatedIssue = await Issue.updateOne(
+      { _id: id },
+      { $set: { votes } }
+    );
+    res.status(200).json(updatedIssue);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error });
+  }
+});
 
 module.exports = router;
