@@ -85,7 +85,16 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const issue = await Issue.updateOne({ _id: id }, { $set: req.body });
+
+    let newIssue = JSON.parse(req.body.data);
+    console.log(newIssue);
+    if (req.files) {
+      newIssue.image = req.files.image.data.toString("base64");
+    }
+    const issue = await Issue.updateOne(
+      { _id: id },
+      { $set: JSON.parse(req.body.data) }
+    );
     res.status(200).json(issue);
   } catch (error) {
     res.status(400).json({ error: error.message });
