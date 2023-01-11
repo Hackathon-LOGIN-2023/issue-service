@@ -6,7 +6,7 @@ const issueSchema = new Schema({
   title: String,
   description: String,
   date: String,
-  photo: String,
+  image: String,
   location: {
     longitude: Number,
     latitude: Number,

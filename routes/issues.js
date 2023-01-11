@@ -28,13 +28,14 @@ router.get("/user/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  console.log(req.files.image.data.toString("base64"));
   try {
     let parsedIssue = JSON.parse(req.body.data);
     const newIssue = new Issue({
       title: parsedIssue.title,
       description: parsedIssue.description,
       date: parsedIssue.date,
-      photo: req.files.image.data.toString("base64"),
+      image: req.files.image.data.toString("base64"),
       location: parsedIssue.location,
       status: parsedIssue.status,
       userId: parsedIssue.userId,
@@ -45,7 +46,6 @@ router.post("/", async (req, res) => {
         value: parsedIssue.votes.value,
       },
     });
-
     const savedIssue = await newIssue.save();
     res.send(savedIssue);
   } catch (error) {
