@@ -28,23 +28,24 @@ router.get("/user/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  console.log(req.files.image.data.toString("base64"));
   try {
     let parsedIssue = JSON.parse(req.body.data);
     const newIssue = new Issue({
       title: parsedIssue.title,
       description: parsedIssue.description,
       date: parsedIssue.date,
-      image: req.files.image.data.toString("base64"),
+      // image: req.files.image.data.toString("base64"),
+      image: parsedIssue.image,
       location: parsedIssue.location,
       status: parsedIssue.status,
       userId: parsedIssue.userId,
       severity: parsedIssue.severity,
       category: parsedIssue.category,
-      votes: {
-        userId: parsedIssue.votes.userId,
-        value: parsedIssue.votes.value,
-      },
+      // votes: {
+      //   userId: parsedIssue.votes.userId,
+      //   value: parsedIssue.votes.value,
+      // },
+      votes: [],
     });
     const savedIssue = await newIssue.save();
     res.send(savedIssue);
@@ -85,12 +86,9 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-
-    let newIssue = JSON.parse(req.body.data);
-    console.log(newIssue);
-    if (req.files) {
-      newIssue.image = req.files.image.data.toString("base64");
-    }
+    // if (req.files) {
+    //   newIssue.image = req.files.image.data.toString("base64");
+    // }
     const issue = await Issue.updateOne(
       { _id: id },
       { $set: JSON.parse(req.body.data) }
