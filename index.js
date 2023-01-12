@@ -4,7 +4,7 @@ const connectDB = require("./config/db");
 const upload = require("express-fileupload");
 
 // const corsOption = {
-  
+
 //   origin: "http://localhost:20699",
 // };
 // Connect to the Database
@@ -14,7 +14,8 @@ const app = express();
 
 // Init Midleware
 // app.use(cors(corsOption));
-app.use(express.json({ extended: false }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: false }));
 app.use(upload()); // permet l'upload des images
 
 app.get("/", (req, res) => {
