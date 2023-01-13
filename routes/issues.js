@@ -91,7 +91,7 @@ router.put("/:id", async (req, res) => {
     // }
     const issue = await Issue.updateOne(
       { _id: id },
-      { $set: JSON.parse(req.body.data) }
+      { $set: req.body }
     );
     res.status(200).json(issue);
   } catch (error) {
