@@ -76,8 +76,21 @@ router.get("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const issue = await Issue.deleteOne({ _id: id });
-    res.status(200).json(issue);
+    var token = req.headers['x-access-token'];
+    if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+    
+    jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+      const userId = decodedToken.id;
+      if ( req.body.userId !== userId) {
+        throw 'Invalid user ID';
+      } else {
+        const issue =  Issue.deleteOne({ _id: id });
+        res.status(200).json(issue);
+      }
+      
+    });
+    
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
