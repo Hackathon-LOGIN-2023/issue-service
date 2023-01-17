@@ -18,13 +18,13 @@ const issueSchema = new Schema({
   },
   userId: Schema.Types.ObjectId,
   severity: {
-    type: String,
-    enum: ["high", "medium", "low"],
-    default: "medium",
+    type: Number,
+    enum: [1, 2, 3],
+    default: 1,
   },
   category: {
-    type: String,
-    enum: ["category 1", "category 2", "category 3", "category 4"],
+    type: Number,
+    enum: [1, 2, 3, 4],
     default: "category 1",
   },
   votes: [
