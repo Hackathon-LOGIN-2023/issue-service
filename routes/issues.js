@@ -90,7 +90,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const id = req.params.id;
     const user = req.user;
