@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Issue = require("../models/issue");
+const verifyToken = require("../middlewares/validateToken");
 
 // get all issues by category
 router.get("/category/:cat", async (req, res) => {
@@ -56,7 +57,6 @@ router.post("/", async (req, res) => {
 });
 router.get("/:id", async (req, res) => {
   try {
-    console.log("third");
     const id = req.params.id;
     const issue = await Issue.findOne({ _id: id });
     res.status(200).json(issue);
@@ -66,31 +66,25 @@ router.get("/:id", async (req, res) => {
 });
 router.get("/", async (req, res) => {
   try {
-    console.log("all");
     res.status(200).json(await Issue.find({}));
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const id = req.params.id;
-    var token = req.headers['x-access-token'];
-    if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-    
-    jwt.verify(token, config.secret, function(err, decoded) {
-      if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-      const userId = decodedToken.id;
-      if ( req.body.userId !== userId) {
-        throw 'Invalid user ID';
-      } else {
-        const issue =  Issue.deleteOne({ _id: id });
-        res.status(200).json(issue);
-      }
-      
-    });
-    
+    const user = req.user;
+    // check if user own the issue
+    const issue = await Issue.findOne({ _id: id });
+    console.log(issue.userId.toString());
+    let issueOwnerId = issue.userId.toString();
+    if (issueOwnerId == user._id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const response = await Issue.deleteOne({ _id: id });
+    res.status(200).json(response);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -99,14 +93,16 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    // if (req.files) {
-    //   newIssue.image = req.files.image.data.toString("base64");
-    // }
-    const issue = await Issue.updateOne(
-      { _id: id },
-      { $set: req.body }
-    );
-    res.status(200).json(issue);
+    const user = req.user;
+    // check if user own the issue
+    const issue = await Issue.findOne({ _id: id });
+    console.log(issue.userId.toString());
+    let issueOwnerId = issue.userId.toString();
+    if (issueOwnerId == user._id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const response = await Issue.updateOne({ _id: id }, { $set: req.body });
+    res.status(200).json(response);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
