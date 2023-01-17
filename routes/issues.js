@@ -46,6 +46,7 @@ router.post("/", async (req, res) => {
       //   value: parsedIssue.votes.value,
       // },
       votes: [],
+      updates: [],
     });
     const savedIssue = await newIssue.save();
     res.send(savedIssue);
@@ -62,6 +63,32 @@ router.get("/:id", async (req, res) => {
     res.status(200).json(issue);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+});
+router.post("/:id/updates", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const image = req.body.image;
+    const description = req.body.description;
+    const severity = req.body.severity;
+    const category = req.body.category;
+    const issue = await Issue.findOne({ _id: id });
+    const updates = issue.updates;
+    const index = updates.findIndex((update) => update.userId == userId);
+    const update = { image, description, severity, category };
+    if (index === -1) {
+      updates.push(update);
+    } else {
+      updates[index] = update;
+    }
+    const updatedIssue = await Issue.updateOne(
+      { _id: id },
+      { $set: { updates } }
+    );
+    res.status(200).json(updatedIssue);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error });
   }
 });
 router.get("/", async (req, res) => {
